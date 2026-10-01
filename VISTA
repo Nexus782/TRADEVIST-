@@ -1,0 +1,919 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TradeVista | Trading Platform</title>
+
+<style>
+:root {
+  --blue: #38a9f9;
+  --blue-dark: #168de0;
+  --red: #e5394f;
+  --bg: #eaf6ff;
+  --white: #ffffff;
+  --text: #172b4d;
+  --muted: #647b96;
+  --border: #c5e6ff;
+  --green: #159b76;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+header {
+  background: white;
+  padding: 18px 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.logo {
+  font-size: 25px;
+  font-weight: bold;
+  color: var(--blue-dark);
+}
+
+.logo span {
+  color: var(--red);
+}
+
+.demo {
+  background: #e4f3ff;
+  color: var(--blue-dark);
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+main {
+  max-width: 1200px;
+  margin: auto;
+  padding: 25px 20px;
+}
+
+h1 {
+  margin-bottom: 5px;
+}
+
+h2, h3 {
+  margin-top: 0;
+}
+
+.muted, .label {
+  color: var(--muted);
+}
+
+.small {
+  font-size: 12px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  margin: 22px 0;
+}
+
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  padding: 20px;
+  margin-bottom: 18px;
+  box-shadow: 0 4px 14px rgba(30, 100, 160, 0.06);
+}
+
+.label {
+  font-size: 13px;
+}
+
+.value {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 10px 0;
+  overflow-wrap: anywhere;
+}
+
+.green {
+  color: var(--green);
+}
+
+.red {
+  color: var(--red);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1.7fr 1fr;
+  gap: 18px;
+}
+
+.price {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.chart {
+  width: 100%;
+  height: 180px;
+  display: block;
+  margin-top: 15px;
+  border-radius: 8px;
+  background: #f4faff;
+}
+
+.asset {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 0;
+  border-bottom: 1px solid #dceeff;
+}
+
+.asset:last-child {
+  border-bottom: none;
+}
+
+.asset-name {
+  font-weight: bold;
+}
+
+.asset button {
+  padding: 7px 10px;
+}
+
+input, select {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0 15px;
+  background: #f4faff;
+  color: var(--text);
+  border: 1px solid #b9dfff;
+  border-radius: 7px;
+  font-size: 14px;
+}
+
+input:focus, select:focus {
+  outline: 2px solid #b9dfff;
+}
+
+button {
+  padding: 11px 13px;
+  border: none;
+  border-radius: 7px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+button:hover {
+  filter: brightness(0.95);
+}
+
+.buy, .deposit-btn {
+  background: var(--blue);
+  color: white;
+}
+
+.sell, .withdraw-btn {
+  background: var(--red);
+  color: white;
+}
+
+.trade-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.trade-buttons button {
+  width: 50%;
+}
+
+.deposit-btn, .withdraw-btn {
+  width: 100%;
+}
+
+.notice {
+  background: #e4f3ff;
+  color: #245078;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 12px;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.payment-option {
+  padding: 13px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  margin-bottom: 10px;
+  background: #f4faff;
+}
+
+.payment-option strong {
+  color: var(--blue-dark);
+}
+
+.payment-option p {
+  margin: 5px 0 0;
+  font-size: 12px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 12px 8px;
+  text-align: left;
+  border-bottom: 1px solid #dceeff;
+  font-size: 13px;
+}
+
+th {
+  color: var(--muted);
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.empty {
+  color: var(--muted);
+  padding: 15px 0;
+}
+
+footer {
+  text-align: center;
+  padding: 25px;
+  color: var(--muted);
+  font-size: 12px;
+  border-top: 1px solid var(--border);
+  background: white;
+}
+
+@media (max-width: 850px) {
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  header {
+    padding: 15px;
+  }
+
+  .logo {
+    font-size: 21px;
+  }
+
+  main {
+    padding: 18px 12px;
+  }
+
+  .cards {
+    gap: 9px;
+  }
+
+  .card {
+    padding: 14px;
+  }
+
+  .value {
+    font-size: 19px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">Trade<span>Vista</span></div>
+  <div class="demo">● DEMO ACCOUNT</div>
+</header>
+
+<main>
+
+  <h1>Trading Dashboard</h1>
+  <p class="muted">
+    Explore markets and manage your virtual trading account.
+  </p>
+
+  <!-- ACCOUNT SUMMARY -->
+
+  <section class="cards">
+
+    <div class="card">
+      <div class="label">Available Balance</div>
+      <div class="value" id="balance">$10,000.00</div>
+      <div class="small muted">Virtual funds</div>
+    </div>
+
+    <div class="card">
+      <div class="label">Portfolio Value</div>
+      <div class="value" id="portfolio">$10,000.00</div>
+      <div class="small muted">Cash and open positions</div>
+    </div>
+
+    <div class="card">
+      <div class="label">Open Positions</div>
+      <div class="value" id="count">0</div>
+      <div class="small muted">Active demo trades</div>
+    </div>
+
+    <div class="card">
+      <div class="label">Unrealized Profit/Loss</div>
+      <div class="value green" id="pnl">$0.00</div>
+      <div class="small muted">Open positions</div>
+    </div>
+
+  </section>
+
+  <section class="layout">
+
+    <div>
+
+      <!-- MARKET CHART -->
+
+      <div class="card">
+        <h3 id="chartTitle">EUR/USD</h3>
+        <div class="price" id="chartPrice">1.0842</div>
+        <p class="small muted">
+          Illustrative prices — not live market data
+        </p>
+
+        <svg class="chart" viewBox="0 0 600 180"
+             preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="chartFill"
+              x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#38a9f9"
+                    stop-opacity=".35"/>
+              <stop offset="100%" stop-color="#38a9f9"
+                    stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+
+          <g stroke="#dceeff" stroke-width="1">
+            <line x1="0" y1="40" x2="600" y2="40"/>
+            <line x1="0" y1="80" x2="600" y2="80"/>
+            <line x1="0" y1="120" x2="600" y2="120"/>
+            <line x1="0" y1="160" x2="600" y2="160"/>
+          </g>
+
+          <path id="chartArea" fill="url(#chartFill)"></path>
+          <path id="chartLine" fill="none"
+                stroke="#168de0" stroke-width="3"
+                stroke-linejoin="round"/>
+        </svg>
+      </div>
+
+      <!-- MARKETS -->
+
+      <div class="card">
+        <h3>Financial Markets</h3>
+        <div id="markets"></div>
+      </div>
+
+      <!-- OPEN POSITIONS -->
+
+      <div class="card">
+        <h3>Open Positions</h3>
+        <div id="positions">No open positions.</div>
+      </div>
+
+    </div>
+
+    <div>
+
+      <!-- TRADING -->
+
+      <div class="card">
+        <h3>Place a Trade</h3>
+
+        <label for="asset">Select Asset</label>
+        <select id="asset"></select>
+
+        <label for="tradeAmount">Trade Amount (USD)</label>
+        <input type="number" id="tradeAmount"
+               min="1" value="500">
+
+        <div class="trade-buttons">
+          <button class="buy" onclick="trade('BUY')">
+            BUY
+          </button>
+
+          <button class="sell" onclick="trade('SELL')">
+            SELL
+          </button>
+        </div>
+
+        <div class="notice" id="tradeMessage">
+          Demo trading only. No real money is involved.
+        </div>
+      </div>
+
+      <!-- DEPOSIT -->
+
+      <div class="card">
+        <h3>Deposit Funds</h3>
+
+        <p class="muted">
+          Add virtual funds to your account.
+        </p>
+
+        <label for="depositAmount">Deposit Amount (USD)</label>
+        <input type="number" id="depositAmount"
+               min="1" placeholder="Enter amount">
+
+        <label for="depositMethod">Payment Method</label>
+        <select id="depositMethod">
+          <option value="M-Pesa">M-Pesa</option>
+          <option value="Bank Transfer">Bank Transfer</option>
+          <option value="Card">Debit/Credit Card</option>
+        </select>
+
+        <button class="deposit-btn" onclick="depositFunds()">
+          Deposit Funds
+        </button>
+
+        <div class="notice" id="depositMessage">
+          Demo deposits only. No payment will be charged.
+        </div>
+      </div>
+
+      <!-- PAYMENT METHODS -->
+
+      <div class="card">
+        <h3>Payment Methods</h3>
+
+        <div class="payment-option">
+          <strong>M-Pesa</strong>
+          <p class="muted">
+            Mobile money payment option
+          </p>
+        </div>
+
+        <div class="payment-option">
+          <strong>Bank Transfer</strong>
+          <p class="muted">
+            Bank payment option
+          </p>
+        </div>
+
+        <div class="payment-option">
+          <strong>Card Payment</strong>
+          <p class="muted">
+            Debit or credit card option
+          </p>
+        </div>
+
+        <div class="notice">
+          These are payment method demonstrations.
+          They do not process real payments.
+        </div>
+      </div>
+
+      <!-- WITHDRAWAL -->
+
+      <div class="card">
+        <h3>Withdraw Funds</h3>
+
+        <label for="withdrawAmount">
+          Withdrawal Amount (USD)
+        </label>
+
+        <input type="number" id="withdrawAmount"
+               min="1" placeholder="Enter amount">
+
+        <label for="withdrawMethod">
+          Withdrawal Method
+        </label>
+
+        <select id="withdrawMethod">
+          <option value="M-Pesa">M-Pesa</option>
+          <option value="Bank Transfer">Bank Transfer</option>
+        </select>
+
+        <button class="withdraw-btn"
+                onclick="withdrawFunds()">
+          Withdraw Funds
+        </button>
+
+        <div class="notice" id="withdrawMessage">
+          Withdrawals use virtual funds only.
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- TRANSACTION HISTORY -->
+
+  <section class="card">
+    <h3>Transaction History</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Transaction</th>
+            <th>Method/Asset</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+
+        <tbody id="history">
+          <tr>
+            <td colspan="5" class="empty">
+              No transactions yet.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <button class="sell" onclick="resetAccount()">
+      Reset Demo Account
+    </button>
+  </section>
+
+</main>
+
+<footer>
+  TradeVista © 2026 | Educational Trading Simulator
+  <br><br>
+  This website uses simulated prices and virtual funds.
+  It is not a broker and does not execute real trades
+  or process actual deposits and withdrawals.
+</footer>
+
+<script>
+const assets = [
+  { name: "EUR/USD", price: 1.0842, decimals: 4 },
+  { name: "GBP/USD", price: 1.2718, decimals: 4 },
+  { name: "USD/JPY", price: 149.62, decimals: 2 },
+  { name: "BTC/USD", price: 67420, decimals: 2 },
+  { name: "ETH/USD", price: 3528.40, decimals: 2 }
+];
+
+let balance = 10000;
+let positions = [];
+let history = [];
+let nextId = 1;
+let selectedAsset = 0;
+
+function money(n) {
+  return n.toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD"
+  });
+}
+
+function fmt(n, decimals = 2) {
+  return Number(n).toLocaleString("en-US", {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals
+  });
+}
+
+function addHistory(type, method, amount, status) {
+  history.push({
+    id: nextId++,
+    type,
+    method,
+    amount,
+    status,
+    time: new Date().toLocaleTimeString()
+  });
+}
+
+function renderMarkets() {
+  document.getElementById("markets").innerHTML =
+    assets.map((a, i) => `
+      <div class="asset">
+        <div>
+          <div class="asset-name">${a.name}</div>
+          <div class="small muted">Market asset</div>
+        </div>
+
+        <div>
+          <strong>${fmt(a.price, a.decimals)}</strong>
+        </div>
+
+        <button class="buy"
+                onclick="selectAsset(${i})">
+          Trade
+        </button>
+      </div>
+    `).join("");
+
+  document.getElementById("asset").innerHTML =
+    assets.map((a, i) => `
+      <option value="${i}">${a.name}</option>
+    `).join("");
+}
+
+function selectAsset(i) {
+  selectedAsset = i;
+
+  document.getElementById("asset").value = i;
+  document.getElementById("chartTitle").textContent =
+    assets[i].name;
+
+  document.getElementById("chartPrice").textContent =
+    fmt(assets[i].price, assets[i].decimals);
+
+  drawChart();
+}
+
+function drawChart() {
+  const values = Array.from({ length: 40 }, (_, i) =>
+    80 + Math.sin(i * 0.6) * 20 +
+    Math.sin(i * 0.17) * 25 + i * 0.3
+  );
+
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+
+  const points = values.map((v, i) => {
+    const x = i * 600 / (values.length - 1);
+    const y = 155 - ((v - min) / (max - min)) * 130;
+    return `${x},${y}`;
+  });
+
+  document.getElementById("chartLine").setAttribute(
+    "d", "M" + points.join(" L")
+  );
+
+  document.getElementById("chartArea").setAttribute(
+    "d", "M" + points.join(" L") +
+    " L600,180 L0,180 Z"
+  );
+}
+
+function trade(side) {
+  const i = Number(document.getElementById("asset").value);
+  const amount = Number(
+    document.getElementById("tradeAmount").value
+  );
+
+  if (!Number.isFinite(amount) || amount <= 0) {
+    document.getElementById("tradeMessage").textContent =
+      "Enter a valid trade amount.";
+    return;
+  }
+
+  if (amount > balance) {
+    document.getElementById("tradeMessage").textContent =
+      "Insufficient virtual balance.";
+    return;
+  }
+
+  const a = assets[i];
+
+  const p = {
+    id: nextId++,
+    asset: i,
+    side,
+    amount,
+    entry: a.price,
+    units: amount / a.price
+  };
+
+  balance -= amount;
+  positions.push(p);
+
+  history.push({
+    id: p.id,
+    type: "Trade " + side,
+    method: a.name,
+    amount,
+    status: "Open",
+    time: new Date().toLocaleTimeString()
+  });
+
+  render();
+
+  document.getElementById("tradeMessage").textContent =
+    side + " order opened for " + a.name + ".";
+}
+
+function closePosition(id) {
+  const p = positions.find(x => x.id === id);
+
+  if (!p) return;
+
+  const current = assets[p.asset].price;
+  const direction = p.side === "BUY" ? 1 : -1;
+
+  const profit =
+    (current - p.entry) * p.units * direction;
+
+  balance += p.amount + profit;
+
+  positions = positions.filter(x => x.id !== id);
+
+  const record = history.find(x => x.id === id);
+
+  if (record) {
+    record.status = "Closed: " + money(profit);
+  }
+
+  render();
+}
+
+function depositFunds() {
+  const amount = Number(
+    document.getElementById("depositAmount").value
+  );
+
+  const method =
+    document.getElementById("depositMethod").value;
+
+  if (!Number.isFinite(amount) || amount <= 0) {
+    document.getElementById("depositMessage").textContent =
+      "Enter a valid deposit amount.";
+    return;
+  }
+
+  balance += amount;
+
+  addHistory("Deposit", method, amount, "Demo completed");
+
+  render();
+
+  document.getElementById("depositMessage").textContent =
+    money(amount) + " virtual funds added using " +
+    method + ".";
+
+  document.getElementById("depositAmount").value = "";
+}
+
+function withdrawFunds() {
+  const amount = Number(
+    document.getElementById("withdrawAmount").value
+  );
+
+  const method =
+    document.getElementById("withdrawMethod").value;
+
+  if (!Number.isFinite(amount) || amount <= 0) {
+    document.getElementById("withdrawMessage").textContent =
+      "Enter a valid withdrawal amount.";
+    return;
+  }
+
+  if (amount > balance) {
+    document.getElementById("withdrawMessage").textContent =
+      "Insufficient virtual balance.";
+    return;
+  }
+
+  balance -= amount;
+
+  addHistory("Withdrawal", method, amount, "Demo completed");
+
+  render();
+
+  document.getElementById("withdrawMessage").textContent =
+    money(amount) + " virtual funds withdrawn using " +
+    method + ".";
+
+  document.getElementById("withdrawAmount").value = "";
+}
+
+function render() {
+  const openValue = positions.reduce(
+    (sum, p) => sum + p.amount, 0
+  );
+
+  const profit = positions.reduce((sum, p) => {
+    const current = assets[p.asset].price;
+    const direction = p.side === "BUY" ? 1 : -1;
+
+    return sum +
+      (current - p.entry) * p.units * direction;
+  }, 0);
+
+  document.getElementById("balance").textContent =
+    money(balance);
+
+  document.getElementById("portfolio").textContent =
+    money(balance + openValue + profit);
+
+  document.getElementById("count").textContent =
+    positions.length;
+
+  const pnl = document.getElementById("pnl");
+
+  pnl.textContent = money(profit);
+  pnl.className = "value " +
+    (profit >= 0 ? "green" : "red");
+
+  document.getElementById("positions").innerHTML =
+    positions.length
+      ? positions.map(p => {
+          const current = assets[p.asset].price;
+          const direction = p.side === "BUY" ? 1 : -1;
+
+          const result =
+            (current - p.entry) * p.units * direction;
+
+          return `
+            <div class="asset">
+              <div>
+                <strong>${assets[p.asset].name}</strong>
+                <div class="small muted">
+                  ${p.side} · ${fmt(p.units, 4)} units
+                </div>
+                <div class="${result >= 0 ? "green" : "red"}">
+                  ${money(result)}
+                </div>
+              </div>
+
+              <button class="sell"
+                      onclick="closePosition(${p.id})">
+                Close
+              </button>
+            </div>
+          `;
+        }).join("")
+      : '<div class="empty">No open positions.</div>';
+
+  document.getElementById("history").innerHTML =
+    history.length
+      ? [...history].reverse().map(h => `
+          <tr>
+            <td>${h.type}</td>
+            <td>${h.method}</td>
+            <td>${money(h.amount)}</td>
+            <td>${h.status}</td>
+            <td>${h.time}</td>
+          </tr>
+        `).join("")
+      : `<tr>
+           <td colspan="5" class="empty">
+             No transactions yet.
+           </td>
+         </tr>`;
+}
+
+function resetAccount() {
+  if (!confirm("Reset the demo account and erase all history?")) {
+    return;
+  }
+
+  balance = 10000;
+  positions = [];
+  history = [];
+  nextId = 1;
+
+  render();
+}
+
+// Update illustrative prices periodically.
+setInterval(() => {
+  assets.forEach(a => {
+    a.price *= 1 + (Math.random() - 0.5) * 0.001;
+  });
+
+  renderMarkets();
+  selectAsset(selectedAsset);
+  render();
+}, 5000);
+
+renderMarkets();
+selectAsset(0);
+render();
+</script>
+
+</body>
+</html>
